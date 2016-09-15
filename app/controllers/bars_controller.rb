@@ -1,5 +1,5 @@
 class BarsController < ApplicationController
   def index
-    #fetch bars
+    @bars = Bar.all
   end
 end

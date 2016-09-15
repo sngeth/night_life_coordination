@@ -5,11 +5,10 @@ RSpec.describe "Main Features", type: :feature do
   describe "viewing bars" do
     context "unauthenticated user" do
       specify "can view all bars" do
+        a_bar = create(:bar,
+                       name: "Sid's Bar",
+                       description: "A very cool bar")
         visit '/bars'
-
-        a_bar = FactoryGirl.create(:bar,
-                                   name: "Sid's Bar",
-                                   description: "A very cool bar")
 
         expect(page).to have_content a_bar.name
         expect(page).to have_content a_bar.description
