@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe "Main Features", type: :feature do
+  let!(:a_bar) { create(:bar,
+                       name: "Sid's Bar",
+                       description: "A very cool bar")
+  }
+
 #User Story: As an unauthenticated user, I can view all bars in my area.
   describe "viewing bars" do
     context "as unauthenticated user" do
       specify "can view all bars" do
-        a_bar = create(:bar,
-                       name: "Sid's Bar",
-                       description: "A very cool bar")
         visit '/bars'
 
         expect(page).to have_content a_bar.name
@@ -20,7 +22,12 @@ RSpec.describe "Main Features", type: :feature do
 #I can add myself to a bar to indicate I am going there tonight.
   describe "attending bars" do
     context "as an authenticated user" do
-      specify "can indicate attendance"
+      specify "can indicate attendance" do
+        visit "/bars"
+
+        click_link('0 GOING')
+        expect(page).to have_content '1 GOING'
+      end
     end
   end
 

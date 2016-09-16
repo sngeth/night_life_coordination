@@ -2,5 +2,6 @@ h1 Bars
 ul
 -@bars.each do |bar|
   li
-    = bar.name
-    = bar.description
+    => bar.name
+    => bar.description
+    a href="#" ="#{bar.attendees || 0} GOING"
