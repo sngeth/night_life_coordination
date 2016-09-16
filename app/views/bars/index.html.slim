@@ -1,7 +1,8 @@
 h1 Bars
 ul
--@bars.each do |bar|
-  li
-    => bar.name
-    => bar.description
-    a href="#" ="#{bar.attendees || 0} GOING"
+  -@bars.each do |bar|
+    li
+      => bar.name
+      => bar.description
+      a href="#" onclick="return attend(this, #{bar.attendees});"
+        ="#{bar.attendees} GOING"
