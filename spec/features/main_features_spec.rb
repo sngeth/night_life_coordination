@@ -21,10 +21,22 @@ RSpec.describe "Main Features", type: :feature do
 
   #User Story: As an authenticated user,
   #I can add myself to a bar to indicate I am going there tonight.
+  let!(:user) { FactoryGirl.create(:user) }
+
   describe "attending bars", js: true do
     context "as an authenticated user" do
       specify "increments going count" do
+        login_as(user, :scope => :user)
         visit '/bars'
+        find('a').click
+        expect(page).to have_content('1 GOING')
+      end
+
+      specify "does not increment if already attending" do
+        login_as(user, :scope => :user)
+        visit '/bars'
+        find('a').click
+        expect(page).to have_content('1 GOING')
         find('a').click
         expect(page).to have_content('1 GOING')
       end

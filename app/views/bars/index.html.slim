@@ -4,5 +4,4 @@ ul
     li
       => bar.name
       => bar.description
-      a href="#" onclick="return attend(this, #{bar.attendees});"
-        ="#{bar.attendees} GOING"
+      = link_to "#{bar.users.count} GOING", bar_attend_path(bar.id), method: :post, remote: true
