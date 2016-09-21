@@ -5,7 +5,13 @@ class BarsController < ApplicationController
 
   def attend
     @bar = Bar.find(params[:bar_id])
-    @bar.users << current_user unless not_attended?
+
+    unless not_attended?
+      @bar.users << current_user
+    else
+      @bar.users.delete(current_user.id)
+    end
+
     @bar.update!(bar_params)
   end
 

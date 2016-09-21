@@ -19,32 +19,36 @@ RSpec.describe "Main Features", type: :feature do
     end
   end
 
-  #User Story: As an authenticated user,
-  #I can add myself to a bar to indicate I am going there tonight.
   let!(:user) { FactoryGirl.create(:user) }
 
-  describe "attending bars", js: true do
-    context "as an authenticated user" do
-      specify "increments going count" do
+  context "as an authenticated user", js: true do
+    #User Story: As an authenticated user,
+    #I can add myself to a bar to indicate I am going there tonight.
+    describe "attending bars" do
+      it "increments going count" do
         login_as(user, :scope => :user)
         visit '/bars'
-        find('a').click
-        expect(page).to have_content('1 GOING')
-      end
-
-      specify "does not increment if already attending" do
-        login_as(user, :scope => :user)
-        visit '/bars'
-        find('a').click
-        expect(page).to have_content('1 GOING')
         find('a').click
         expect(page).to have_content('1 GOING')
       end
     end
+
+    #User Story: As an authenticated user,
+    #I can remove myself from a bar if I no longer want to go there.
+    describe "unattending bars" do
+      it "decrements going count" do
+        login_as(user, :scope => :user)
+        visit '/bars'
+        find('a').click
+        expect(page).to have_content('1 GOING')
+        find('a').click
+        expect(page).to have_content('0 GOING')
+      end
+    end
   end
 
-#User Story: As an authenticated user,
-#I can remove myself from a bar if I no longer want to go there.
+  describe "unattending bars", js: true do
+  end
 
 #User Story: As an unauthenticated user,
 #when I login I should not have to search again.
