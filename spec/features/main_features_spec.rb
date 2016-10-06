@@ -10,11 +10,12 @@ RSpec.describe "Main Features", type: :feature do
   #User Story: As an unauthenticated user, I can view all bars in my area.
   describe "viewing bars" do
     context "as unauthenticated user" do
-      specify "can view all bars" do
-        visit '/bars'
-
-        expect(page).to have_content a_bar.name
-        expect(page).to have_content a_bar.description
+      specify "can search and view all bars" do
+        visit '/'
+        expect(page).to have_css('div.result', count: 0)
+        fill_in 'location', with: "Jacksonville"
+        click_button 'Go'
+        expect(page).to have_css('div.result', count: 10)
       end
     end
   end
