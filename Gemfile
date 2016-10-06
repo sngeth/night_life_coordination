@@ -27,6 +27,7 @@ gem 'slim-rails'
 gem 'devise'
 gem 'capybara-webkit'
 gem 'launchy'
+gem 'httparty'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -37,6 +38,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.5'
   gem 'capybara'
   gem 'factory_girl_rails'
+  gem 'webmock'
 end
 
 group :test do

@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Main Features", type: :feature do
+  before(:each) do
+    WebMock.allow_net_connect!
+  end
+
   let!(:a_bar) do
    create(:bar,
           name: "Sid's Bar",

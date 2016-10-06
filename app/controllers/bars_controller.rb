@@ -13,6 +13,8 @@ class BarsController < ApplicationController
     end
 
     @bar.update!(bar_params)
+
+    render nothing: true
   end
 
   private
