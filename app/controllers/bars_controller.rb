@@ -6,9 +6,15 @@ class BarsController < ApplicationController
   def search
     @results = Yelp.client.search(params[:q], { term: 'bars', limit: 10 })
 
+    @results.businesses.each do |bar|
+      Bar.find_or_create_by(name: "#{bar.name}")
+    end
+
+    @bars = Bar.all
+
     respond_to do |format|
       format.html { render :index }
-      format.json { render json: @results }
+      format.json { render json: @bars }
     end
   end
 
@@ -21,17 +27,18 @@ class BarsController < ApplicationController
       @bar.users.delete(current_user.id)
     end
 
-    @bar.update!(bar_params)
-
-    render nothing: true
+    respond_to do |format|
+      format.js { render 'bars/attend' }
+    end
   end
 
   private
+
   def not_attended?
     @bar.users.include? current_user
   end
 
   def bar_params
-    params.permit(:name, :description, :attendees)
+    params.permit(:name, :description, :bar_id)
   end
 end

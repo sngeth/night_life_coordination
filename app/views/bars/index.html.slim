@@ -1,6 +1,7 @@
 h1 Bars
 ul
-  -@results.businesses.each do |bar|
+  -@bars.each do |bar|
     li.bar
       => bar.name
-      / = link_to "#{bar.users.count} GOING", bar_attend_path(bar.id), method: :post, remote: true
+      = link_to "#{bar.users.count} GOING", \
+        bar_attend_path(bar.id), method: :post, remote: true

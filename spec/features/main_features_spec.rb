@@ -4,12 +4,14 @@ RSpec.describe "Main Features", type: :feature do
 
   #User Story: As an unauthenticated user, I can view all bars in my area.
 
+  before(:each) do
+    stub_request(:get, "https://api.yelp.com/v2/search?limit=10&location=Jacksonville&term=bars")
+      .to_return(body: File.read(Rails.root.to_s + "/spec/support/fixtures/search.json"))
+  end
+
   describe "viewing bars" do
     context "as unauthenticated user" do
       specify "can search and view all bars" do
-        stub_request(:get, "https://api.yelp.com/v2/search?limit=10&location=Jacksonville&term=bars")
-          .to_return(body: File.read(Rails.root.to_s + "/spec/support/fixtures/search.json"))
-
         visit '/'
         expect(page).to have_css('li.bar', count: 0)
         fill_in 'Location', with: "Jacksonville"
@@ -26,9 +28,15 @@ RSpec.describe "Main Features", type: :feature do
     #I can add myself to a bar to indicate I am going there tonight.
     describe "attending bars" do
       it "increments going count" do
-        login_as(user, :scope => :user)
-        visit '/bars'
-        find('a').click
+        login_as(user, scope: :user)
+        visit '/'
+        fill_in 'Location', with: "Jacksonville"
+        click_button 'Go'
+
+        within('.bar', text: 'Sidecar') do
+          click_link('0 GOING')
+        end
+
         expect(page).to have_content('1 GOING')
       end
     end
@@ -37,11 +45,21 @@ RSpec.describe "Main Features", type: :feature do
     #I can remove myself from a bar if I no longer want to go there.
     describe "unattending bars" do
       it "decrements going count" do
-        login_as(user, :scope => :user)
-        visit '/bars'
-        find('a').click
+        login_as(user, scope: :user)
+        visit '/'
+        fill_in 'Location', with: "Jacksonville"
+        click_button 'Go'
+
+        within('.bar', text: 'Sidecar') do
+          click_link('0 GOING')
+        end
+
         expect(page).to have_content('1 GOING')
-        find('a').click
+
+        within('.bar', text: 'Sidecar') do
+          click_link('1 GOING')
+        end
+
         expect(page).to have_content('0 GOING')
       end
     end
