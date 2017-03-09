@@ -3,6 +3,15 @@ class BarsController < ApplicationController
     @bars = Bar.all
   end
 
+  def search
+    @results = Yelp.client.search(params[:q], { term: 'bars', limit: 10 })
+
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: @results }
+    end
+  end
+
   def attend
     @bar = Bar.find(params[:bar_id])
 

@@ -1,25 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe "Main Features", type: :feature do
-  before(:each) do
-    WebMock.allow_net_connect!
-  end
-
-  let!(:a_bar) do
-   create(:bar,
-          name: "Sid's Bar",
-          description: "A very cool bar")
-  end
 
   #User Story: As an unauthenticated user, I can view all bars in my area.
+
   describe "viewing bars" do
     context "as unauthenticated user" do
       specify "can search and view all bars" do
+        stub_request(:get, "https://api.yelp.com/v2/search?limit=10&location=Jacksonville&term=bars")
+          .to_return(body: File.read(Rails.root.to_s + "/spec/support/fixtures/search.json"))
+
         visit '/'
-        expect(page).to have_css('div.result', count: 0)
-        fill_in 'location', with: "Jacksonville"
+        expect(page).to have_css('li.bar', count: 0)
+        fill_in 'Location', with: "Jacksonville"
         click_button 'Go'
-        expect(page).to have_css('div.result', count: 10)
+        expect(page).to have_css('li.bar', count: 10)
       end
     end
   end
