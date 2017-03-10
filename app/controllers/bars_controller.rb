@@ -1,4 +1,6 @@
 class BarsController < ApplicationController
+  before_action :authenticate_user!, only: [:attend]
+
   def index
     @bars = Bar.all
   end

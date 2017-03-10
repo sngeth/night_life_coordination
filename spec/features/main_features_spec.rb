@@ -9,6 +9,8 @@ RSpec.describe "Main Features", type: :feature do
       .to_return(body: File.read(Rails.root.to_s + "/spec/support/fixtures/search.json"))
   end
 
+  let!(:user) { create(:user) }
+
   describe "viewing bars" do
     context "as unauthenticated user" do
       specify "can search and view all bars" do
@@ -16,6 +18,19 @@ RSpec.describe "Main Features", type: :feature do
         expect(page).to have_css('li.bar', count: 0)
         fill_in 'Location', with: "Jacksonville"
         click_button 'Go'
+        expect(page).to have_css('li.bar', count: 10)
+      end
+
+      specify "can see search after logging in" do
+        visit '/'
+        expect(page).to have_css('li.bar', count: 0)
+        fill_in 'Location', with: "Jacksonville"
+        click_button 'Go'
+        expect(page).to have_css('li.bar', count: 10)
+        click_link 'Login'
+        fill_in 'Email', with: "example@example.com"
+        fill_in 'Password', with: "123456"
+        click_button "Log in"
         expect(page).to have_css('li.bar', count: 10)
       end
     end
@@ -64,10 +79,4 @@ RSpec.describe "Main Features", type: :feature do
       end
     end
   end
-
-  describe "unattending bars", js: true do
-  end
-
-#User Story: As an unauthenticated user,
-#when I login I should not have to search again.
 end
