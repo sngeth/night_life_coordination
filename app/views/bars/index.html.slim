@@ -1,10 +1,7 @@
 h1 Bars
-div class="row"
-  div class="col-lg-6"
-    = form_tag("/search", method: "get")
-      = label_tag(:q, "Location")
-      = text_field_tag(:q, nil, class: "form-control", type: "search")
-      = submit_tag("Go")
+=render 'shared/search'
+
+h2 Current Location: #{@current_location}
 
 ul
   -@bars.each do |bar|

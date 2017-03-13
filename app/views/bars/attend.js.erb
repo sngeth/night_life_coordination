@@ -1,2 +1,2 @@
-$("li:contains('<%= @bar.name %>') > a")
+$("li:contains('<%= raw @bar.name %>') > a")
   .text('<%= @bar.users.count %> GOING');
